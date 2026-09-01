@@ -1,0 +1,6 @@
+.env
+.venv-hopsworks/
+.venv
+__pycache__/
+*.pyc
+model_training/artifacts/
