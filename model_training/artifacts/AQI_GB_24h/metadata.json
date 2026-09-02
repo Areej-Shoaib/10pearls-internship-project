@@ -1,0 +1,21 @@
+{
+    "model_name": "AQI_GB_24h",
+    "target": "target_24h",
+    "forecast_horizon": "24h",
+    "framework": "scikit-learn",
+    "model_type": "GradientBoostingRegressor",
+    "n_estimators": 200,
+    "learning_rate": 0.1,
+    "max_depth": 2,
+    "scaler": "Existing original scaler reused",
+    "training_rows": 72122,
+    "validation_rows": 15455,
+    "test_rows": 15455,
+    "validation_rmse": 16.791250011387028,
+    "validation_mae": 10.599447870773249,
+    "validation_r2": 0.5682591499075574,
+    "test_rmse": 11.994019032525514,
+    "test_mae": 8.357938739918344,
+    "test_r2": 0.563039199361451,
+    "number_of_features": 35
+}
