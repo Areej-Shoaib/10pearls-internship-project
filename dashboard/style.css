@@ -62,7 +62,7 @@
 }
 
 
-[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stMetric"] {
+[data-testid="stVerticalBlock"]:has(> [data-testid="element-container"] .shap-card-title) [data-testid="stMetric"] {
     background-color: transparent;
     border: none;
     padding: 0;
