@@ -1,0 +1,304 @@
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.live-indicator {
+    text-align: right;
+    margin-top: 1.5rem;
+    margin-left: auto;
+    width: fit-content;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #dce7de;
+    border-radius: 20px;
+    background-color: #ffffff;
+}
+
+.live-indicator span {
+    color: #dc2626;
+    font-size: 0.8rem;
+}
+
+/* ---------- Light Theme ---------- */
+
+.stApp {
+    background-color: #f7faf8;
+}
+
+/* ---------- Green Theme ---------- */
+
+[data-testid="stHeadingWithActionElements"] h1 {
+    color: #15803d;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+[data-testid="stHeadingWithActionElements"] h2,
+[data-testid="stHeadingWithActionElements"] h3 {
+    color: #15803d;
+    font-weight: 600;
+}
+
+/* Metric labels */
+[data-testid="stMetricLabel"] {
+    color: #5b6b60;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+[data-testid="stMetricValue"] {
+    color: #1a2e22;
+    font-weight: 700;
+    font-size: 1.9rem;
+}
+
+[data-testid="stMetric"] {
+    background-color: #ffffff;
+    border: 1px solid #b6cbba;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+}
+
+
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stMetric"] {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+[data-testid="stWidgetLabel"] p {
+    font-size: 1rem;
+}
+
+hr {
+    border-color: #dce7de !important;
+}
+
+.last-updated-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1a2e22;
+    margin-top: 0.8rem;
+    margin-bottom: 0.1rem;
+}
+
+.last-updated-value {
+    color: #5b6b60;
+    margin-top: 0;
+}
+
+.info-card {
+    background-color: #ffffff;
+    border: 1px solid #a9c2ae;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-card-label {
+    color: #5b6b60;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+}
+
+.info-card-value {
+    color: #1a2e22;
+    font-weight: 700;
+    font-size: 1.9rem;
+    margin-top: 0.3rem;
+}
+
+.info-card-text {
+    margin-top: 0.5rem;
+}
+
+/* ---------- Current AQI Gauge ---------- */
+
+.aqi-gauge-card {
+background-color: #ffffff;
+border: 1px solid #b6cbba;
+border-radius: 12px;
+padding: 1rem 1.5rem 1.2rem;
+text-align: center;
+min-height: 230px;
+}
+
+.aqi-gauge-title {
+color: #5b6b60;
+font-weight: 700;
+font-size: 1rem;
+margin-bottom: 0.2rem;
+}
+
+.aqi-gauge {
+position: relative;
+width: 280px;
+height: 155px;
+margin: 0 auto;
+overflow: hidden;
+}
+
+.aqi-gauge-track {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 270deg,
+        #15803d 0deg 45deg,
+        #6fa87c 45deg 90deg,
+        #9fc0a6 90deg 135deg,
+        #cbd5cf 135deg 180deg,
+        transparent 180deg 360deg
+    );
+}    
+     
+
+.aqi-gauge-inner {
+position: absolute;
+width: 220px;
+height: 220px;
+top: 30px;
+left: 30px;
+border-radius: 50%;
+background-color: #ffffff;
+}
+
+.aqi-gauge-value {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    color: #1a2e22;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 5;
+}
+
+.aqi-gauge-category {
+    color: #15803d;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: -2px;
+}
+
+.aqi-gauge-scale {
+    display: flex;
+    justify-content: space-between;
+    color: #7a887e;
+    font-size: 0.75rem;
+    width: 280px;
+    margin: -1px auto 0;
+    padding: 0;
+}
+
+.aqi-gauge-needle {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    width: 3px;
+    height: 85px;             
+    margin-left: -1.5px;
+    background-color: #7a887e; 
+    transform-origin: bottom center;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.aqi-gauge-pivot {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    background-color: #7a887e;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+/* ======================================================
+   SHAP Explainability
+   ====================================================== */
+
+.shap-card-title {
+    color: #1a2e22;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.shap-section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.shap-section-title.positive {
+    color: #64746a;
+}
+
+.shap-section-title.negative {
+    color: #15803d;
+} 
+
+.shap-row {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr auto;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.45rem;
+}
+
+.shap-feature {
+    color: #4f5f54;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shap-bar-container {
+    height: 7px;
+    background-color: #edf2ee;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.shap-bar {
+    height: 100%;
+    border-radius: 5px;
+}
+
+.shap-bar.positive {
+    background-color: #8fa99a;
+}
+
+.shap-bar.negative {
+    background-color: #15803d;
+}
+
+.shap-value {
+    min-width: 42px;
+    text-align: right;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.shap-value.positive {
+    color: #64746a;
+}
+
+.shap-value.negative {
+    color: #15803d;
+}

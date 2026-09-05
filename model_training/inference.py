@@ -1,11 +1,12 @@
-
 import os
+import sys
 import json
 import joblib
 import requests
 import numpy as np
 import pandas as pd
 import hopsworks
+import shap
 
 from datetime import datetime
 from dotenv import load_dotenv
@@ -568,6 +569,100 @@ def scale_input(
 
     return scaled_features
 
+# ======================================================
+# Features excluded from dashboard explanations
+# (categorical/context features, not environmental drivers)
+# ======================================================
+
+EXCLUDED_FROM_EXPLANATION_PREFIXES = (
+    "city_",
+    "weekday_",
+    "aqi_change_rate"
+)
+
+
+# ======================================================
+# Generate Local SHAP Explanation
+# ======================================================
+
+def generate_local_explanation(
+    model,
+    scaled_features,
+    feature_names,
+    top_n=5
+):
+
+    # Create SHAP explainer for the tree-based model
+    explainer = shap.TreeExplainer(model)
+
+    # Calculate SHAP values for the current input row
+    shap_values = explainer.shap_values(
+        scaled_features
+    )
+
+    # Handle SHAP output format
+    if isinstance(shap_values, list):
+        shap_values = shap_values[0]
+
+    shap_values = np.asarray(
+        shap_values
+    ).reshape(-1)
+
+    # Get feature values for the current prediction
+    feature_values = scaled_features.iloc[0]
+
+    # Build explanation table
+    explanation = pd.DataFrame({
+        "feature": feature_names,
+        "shap_value": shap_values,
+        "feature_value": feature_values.values
+    })
+
+    # --------------------------------------------------
+    # Filter out categorical/context features
+    # (city, weekday) — these stay in the model,
+    # just excluded from the displayed explanation
+    # --------------------------------------------------
+
+    explanation = explanation[
+        ~explanation["feature"].str.startswith(
+            EXCLUDED_FROM_EXPLANATION_PREFIXES
+        )
+    ]
+
+    # Rank by absolute SHAP impact
+    explanation["abs_shap"] = (
+        explanation["shap_value"].abs()
+    )
+
+    explanation = explanation.sort_values(
+        "abs_shap",
+        ascending=False
+    ).head(top_n)
+
+    # Convert to dashboard-friendly JSON format
+    results = []
+
+    for _, row in explanation.iterrows():
+
+        shap_value = float(
+            row["shap_value"]
+        )
+
+        direction = (
+            "increases"
+            if shap_value > 0
+            else "decreases"
+        )
+
+        results.append({
+            "feature": row["feature"],
+            "impact": shap_value,
+            "direction": direction
+        })
+
+    return results
+
 
 # ======================================================
 # Run Inference
@@ -634,6 +729,7 @@ def predict_aqi(city):
     mr = get_model_registry()
 
     predictions = {}
+    explanations = {}
 
     # --------------------------------------------------
     # Predict for each horizon
@@ -668,7 +764,9 @@ def predict_aqi(city):
             scaler
         )
 
+        
         # Prediction
+                # Prediction
         prediction = model.predict(
             scaled_features
         )[0]
@@ -676,6 +774,30 @@ def predict_aqi(city):
         predictions[horizon] = float(
             prediction
         )
+
+        # --------------------------------------------------
+        # Local SHAP Explanation
+        # --------------------------------------------------
+
+        horizon_explanations = generate_local_explanation(
+            model,
+            scaled_features,
+            feature_names,
+            top_n=5
+        )
+
+        explanations[horizon] = horizon_explanations
+
+        print(
+            f"\nTop 5 contributors for {horizon}:"
+        )
+
+        for item in horizon_explanations:
+            print(
+                f"  {item['feature']}: "
+                f"{item['impact']:.4f} "
+                f"({item['direction']})"
+            )
 
     # --------------------------------------------------
     # Display predictions
@@ -703,13 +825,40 @@ def predict_aqi(city):
 
     return {
         "city": city,
-        "timestamp": latest_raw["time"].iloc[0],
-        "current_aqi": float(
-            latest_raw[
-                "european_aqi"
-            ].iloc[0]
-        ),
-        "predictions": predictions
+        "timestamp": str(latest_raw["time"].iloc[0]),
+
+        "current_conditions": {
+            "aqi": float(
+                latest_raw["european_aqi"].iloc[0]
+            ),
+            "temperature": float(
+                latest_raw["temperature_2m"].iloc[0]
+            ),
+            "humidity": float(
+                latest_raw["relative_humidity_2m"].iloc[0]
+            ),
+            "wind_speed": float(
+                latest_raw["wind_speed_10m"].iloc[0]
+            ),
+            "pm2_5": float(
+                latest_raw["pm2_5"].iloc[0]
+            ),
+            "pm10": float(
+                latest_raw["pm10"].iloc[0]
+            )
+        },
+
+        "predictions": {
+            "24h": float(predictions["24h"]),
+            "48h": float(predictions["48h"]),
+            "72h": float(predictions["72h"])
+        },
+
+        "explanations": {
+            "24h": explanations["24h"],
+            "48h": explanations["48h"],
+            "72h": explanations["72h"]
+        }
     }
 
 
@@ -719,10 +868,31 @@ def predict_aqi(city):
 
 if __name__ == "__main__":
 
-    # Change this city to test another city
-    CITY = "Karachi"
+    # Get city from command-line argument
+    # Default to Karachi if no city is provided
+    if len(sys.argv) > 1:
+        CITY = sys.argv[1]
+    else:
+        CITY = "Karachi"
 
-    result = predict_aqi(
-        CITY
+    # Validate city
+    if CITY not in CITIES:
+        print(f"Error: Unsupported city '{CITY}'")
+        print("Supported cities:")
+        for city in CITIES:
+            print(f"  - {city}")
+        sys.exit(1)
+
+    result = predict_aqi(CITY)
+
+    # Save inference result as JSON
+    output_path = os.path.join(
+        os.path.dirname(__file__),
+        "prediction_result.json"
     )
 
+
+    with open(output_path, "w") as f:
+        json.dump(result, f, indent=4)
+
+    print(f"\nPrediction result saved to: {output_path}")

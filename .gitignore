@@ -2,6 +2,10 @@
 
 .venv-hopsworks/
 
+.venv-dashboard/
+
+.venv-deploy-test/
+
 .venv
 
 __pycache__/
@@ -15,3 +19,13 @@ model_training/artifacts/*
 !model_training/artifacts/AQI_GB_48h/scaler.pkl
 !model_training/artifacts/AQI_GB_72h/
 !model_training/artifacts/AQI_GB_72h/scaler.pkl
+
+model_training/prediction_result.json
+
+.streamlit/secrets.tomld
+
+data/
+
+test/
+
+verify_feature_grp.py 
