@@ -2,6 +2,9 @@
 
 An end-to-end machine learning and MLOps application for forecasting Air Quality Index (AQI) across major cities in Pakistan for the next 24, 48, and 72 hours.
 
+[Full Project Report (PDF)](CityAQI%20Forecast%20Project%20Report.pdf)
+[Live Streamlit App](https://city-aqi-forecast.streamlit.app/)
+
 ## Quick Start
 
 ### 1. Clone the Repository
