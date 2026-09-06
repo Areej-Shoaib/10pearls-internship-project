@@ -645,7 +645,7 @@ The EDA outputs were used to understand the dataset and identify relevant charac
 The Streamlit dashboard is deployed and publicly accessible.
 
 **Live Application:**
-[Add deployed Streamlit URL here]
+(https://city-aqi-forecast.streamlit.app/)
 
 The deployed application provides the interactive CityAQI Forecast dashboard without requiring users to configure the local development environment.
 
